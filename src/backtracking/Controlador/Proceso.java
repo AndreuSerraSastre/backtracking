@@ -35,7 +35,7 @@ public class Proceso extends Thread {
     private void esperar() {
         try {
             Thread.sleep(1000/360);
-        } catch (Exception e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
     }

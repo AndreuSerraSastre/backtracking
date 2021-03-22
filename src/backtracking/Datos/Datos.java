@@ -1,44 +1,47 @@
-/*
- * Implementación del Modelo de Datos del patrón de diseño MVC.
-   Extiende una clase Observable. De esta forma la Interfaz Observer puede
-    vigilar el comportamiento del modelo de datos.
- */
 package backtracking.Datos;
 
+import java.util.ArrayList;
 import java.util.Observable;
 
-/**
- *
- * @author mascport
- */
 public class Datos extends Observable {
 
-    //Variables que mantienen el estado del modelo de datos de MVC
-    private int num;
+    private int N = 7;
+    private ArrayList<Pieza> piezas = new ArrayList<>();
 
     //Constructor que inicializa el modelo de datos
     public Datos() {
         inicializar();
     }
 
-    //Métodos que modifican el estado del modelo
-    //gets, sets, ...     Ejemplo:
     public void cambiarEstado() {
-        num++;
-        if (num == 360) {
-            num = 0;
-        }
         notificarCambio();  //Notifica del cambio del modelo de datos a todos los objetos OBSERVADORES
     }
-    
-    public int getNum() {
-        return num;
+
+    public int getN() {
+        return N;
     }
-    
+
+    public void setN(int N) {
+        this.N = N;
+    }
+
     public void inicializar() {
-        num = -1;
+        piezas.add(new Rei(4, 2, false));
+        piezas.add(new Rei(1, 2, true));
+        piezas.add(new Rei(6, 6, false));
+
+        piezas.add(new Reina(0, 0, false));
+        piezas.add(new Reina(5, 5, true));
+        piezas.add(new Reina(1, 5, false));
+
+        piezas.add(new Torre(3, 3, false, N));
+        piezas.add(new Torre(1, 0, false, N));
     }
-    
+
+    public ArrayList<Pieza> getPiezas() {
+        return piezas;
+    }
+
     //Método que avisa a los Observadores
     private void notificarCambio() {
         setChanged();  //Marca al modelo de datos como MODIFICADO
