@@ -54,7 +54,6 @@ public class Tablero extends JPanel implements Observer {
 
     public void paint(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
-        Rectangle rect = new Rectangle();
 
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setColor(Color.GRAY);
