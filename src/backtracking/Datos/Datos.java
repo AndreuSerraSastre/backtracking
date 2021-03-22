@@ -13,10 +13,6 @@ public class Datos extends Observable {
         inicializar();
     }
 
-    public void cambiarEstado() {
-        notificarCambio();  //Notifica del cambio del modelo de datos a todos los objetos OBSERVADORES
-    }
-
     public int getN() {
         return N;
     }
@@ -26,16 +22,6 @@ public class Datos extends Observable {
     }
 
     public void inicializar() {
-        piezas.add(new Rei(4, 2, false));
-        piezas.add(new Rei(1, 2, true));
-        piezas.add(new Rei(6, 6, false));
-
-        piezas.add(new Reina(0, 0, false));
-        piezas.add(new Reina(5, 5, true));
-        piezas.add(new Reina(1, 5, false));
-
-        piezas.add(new Torre(3, 3, false, N));
-        piezas.add(new Torre(1, 0, false, N));
     }
 
     public ArrayList<Pieza> getPiezas() {
@@ -47,4 +33,16 @@ public class Datos extends Observable {
         setChanged();  //Marca al modelo de datos como MODIFICADO
         notifyObservers();  //Notifica a los observadores que miren si el modelo (el observado) ha cambiado
     }
+
+    public void setPiezas(Pieza pieza) {
+        this.piezas.add(pieza);
+        notificarCambio();
+    }
+    
+    public void changePositionPieza(Pieza pieza, int x, int y){
+        pieza.setPosicionX(x);
+        pieza.setPosicionY(y);
+        notificarCambio();
+    }
+
 }

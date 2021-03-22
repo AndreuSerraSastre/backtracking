@@ -27,7 +27,7 @@ public class Principal {
                 proc = new Proceso(dad);
                 proc.start();
             }
-        } else if (s.contentEquals("gui" + ":" + gui.BOTON02)) {
+        } else if (s.contentEquals("gui" + ":" + gui.BOTON02) && proc != null) {
             proc.parar();
             proc = null;
         }

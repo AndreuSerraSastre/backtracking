@@ -52,6 +52,9 @@ public class Tablero extends JPanel implements Observer {
         Graphics2D g2 = (Graphics2D) g;
         int N = dad.getN();
 
+        g2.setColor(Color.WHITE);
+        g2.fillRect(0,0, LONG, LONG);
+
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setColor(Color.GRAY);
 
