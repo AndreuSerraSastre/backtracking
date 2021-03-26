@@ -4,8 +4,10 @@
  */
 package backtracking.Controlador;
 
+import backtracking.Datos.Araña;
+import backtracking.Datos.Caballo;
 import backtracking.Datos.Datos;
-import backtracking.Datos.Pieza;
+import backtracking.Datos.Rayo;
 import backtracking.Datos.Rei;
 import backtracking.Datos.Reina;
 import backtracking.Datos.Torre;
@@ -13,7 +15,7 @@ import backtracking.Datos.Torre;
 public class Proceso extends Thread {
 
     //Puntero a los datos del programa.
-    private Datos dad;
+    private final Datos dad;
     private boolean seguir;
 
     //Constructor del proceso que guarda un puntero a los datos del programa
@@ -22,25 +24,11 @@ public class Proceso extends Thread {
     }
 
     //Bucle de ejecución que cambia el estado del Modelo de datos.
+    @Override
     public void run() {
         seguir = true;
 
-        dad.setPiezas(new Rei(4, 2, false));
-        dad.setPiezas(new Rei(1, 2, true));
-        
-        dad.setPiezas(new Reina(5, 5, true));
-        dad.setPiezas(new Reina(1, 5, false));
-
-        dad.setPiezas(new Torre(1, 0, false, dad.getN()));
-        
-        Pieza pieza = new Torre(3, 3, true, dad.getN());
-        dad.setPiezas(pieza);
-
         while (seguir) {
-            dad.changePositionPieza(pieza, pieza.getPosicionX() + 1, pieza.getPosicionY() + 1);
-            if (pieza.getPosicionX() == dad.getN()) {
-                dad.changePositionPieza(pieza, 0, 0);
-            }
             esperar();
         }
     }
@@ -55,6 +43,29 @@ public class Proceso extends Thread {
             Thread.sleep(200000 / 360);
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void setPieza(int x, int y, String pieza) {
+        switch (pieza) {
+            case "Caballo":
+                dad.setPiezas(new Caballo(x, y, false));
+                break;
+            case "Rei":
+                dad.setPiezas(new Rei(x, y, false));
+                break;
+            case "Reina":
+                dad.setPiezas(new Reina(x, y, false, dad.getN()));
+                break;
+            case "Torre":
+                dad.setPiezas(new Torre(x, y, false, dad.getN()));
+                break;
+            case "Araña":
+                dad.setPiezas(new Araña(x, y, false));
+                break;
+            case "Rayo":
+                dad.setPiezas(new Rayo(x, y, false));
+                break;
         }
     }
 }

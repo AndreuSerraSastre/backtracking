@@ -30,6 +30,22 @@ public class Principal {
         } else if (s.contentEquals("gui" + ":" + gui.BOTON02) && proc != null) {
             proc.parar();
             proc = null;
+        } else if (s.contentEquals("gui" + ":" + "Borrar Piezas") && proc != null) {
+            dad.inicializar();
+        } else if (s.startsWith("setPieza" + ":")) {
+            s = s.split(":")[1];
+            int x = Integer.parseInt(s.split("/")[0]);
+            int y = Integer.parseInt(s.split("/")[1]);
+            String pieza = s.split("/")[2];
+            if (proc == null) {
+                proc = new Proceso(dad);
+                proc.setPieza(x, y, pieza);
+            } else {
+                proc.setPieza(x, y, pieza);
+            }
+        } else if (s.startsWith("gui" + ":" + gui.BOTON04)) {
+            int N = Integer.parseInt(s.split("/")[1]);
+            dad.setN(N);
         }
     }
 

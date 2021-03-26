@@ -15,6 +15,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -29,15 +31,18 @@ import javax.swing.JPanel;
  *
  * @author mascport
  */
-public class Tablero extends JPanel implements Observer {
+public class Tablero extends JPanel implements Observer, MouseListener {
 
     private final Datos dad;
+    private final Gui gui;
     private final int LONG = 800;
 
-    public Tablero(Datos d) {
+    public Tablero(Datos d, Gui g) {
         this.setPreferredSize(new Dimension(LONG, LONG));
         this.setLayout(new BorderLayout());
         dad = d;
+        gui = g;
+        this.addMouseListener(this);
     }
 
     @Override
@@ -53,7 +58,7 @@ public class Tablero extends JPanel implements Observer {
         int N = dad.getN();
 
         g2.setColor(Color.WHITE);
-        g2.fillRect(0,0, LONG, LONG);
+        g2.fillRect(0, 0, LONG, LONG);
 
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2.setColor(Color.GRAY);
@@ -95,5 +100,27 @@ public class Tablero extends JPanel implements Observer {
         } catch (IOException ex) {
             Logger.getLogger(Tablero.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent me) {
+        int radio = LONG / dad.getN();
+        gui.setPieza((int) me.getX() / radio, (int) me.getY() / radio);
+    }
+
+    @Override
+    public void mousePressed(MouseEvent me) {
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent me) {
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent me) {
+    }
+
+    @Override
+    public void mouseExited(MouseEvent me) {
     }
 }
