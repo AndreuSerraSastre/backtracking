@@ -46,6 +46,7 @@ public class Principal {
         } else if (s.startsWith("gui" + ":" + gui.BOTON04)) {
             int N = Integer.parseInt(s.split("/")[1]);
             dad.setN(N);
+            dad.inicializar();
         }
     }
 
