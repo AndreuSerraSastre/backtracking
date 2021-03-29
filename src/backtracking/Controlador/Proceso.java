@@ -13,6 +13,8 @@ import backtracking.Datos.Rei;
 import backtracking.Datos.Reina;
 import backtracking.Datos.Torre;
 import java.awt.Point;
+import java.util.concurrent.TimeUnit;
+import javax.swing.JOptionPane;
 
 public class Proceso extends Thread {
 
@@ -29,11 +31,22 @@ public class Proceso extends Thread {
     @Override
     public void run() {
         seguir = true;
-
-//        while (!seguir) {
+        long tempsfuncio = System.nanoTime();
         visitar(0);
-//            esperar();
-//        }
+        tempsfuncio = System.nanoTime() - tempsfuncio;
+
+        if (dad.todasVisitadas()) {
+            JOptionPane.showMessageDialog(null, "Se ha finalizado el recorrido con un tiempo de: " + formatNano(tempsfuncio) + " s.", "¡FINALIZADO!", JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(null, "No se ha podido encontrar ninguna solución.", "¡ERROR!", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    private String formatNano(long temps) {
+        long segundos = TimeUnit.SECONDS.convert(temps, TimeUnit.NANOSECONDS);
+        long milisegundos = TimeUnit.MILLISECONDS.convert(temps - (segundos * 1000 * 1000 * 1000), TimeUnit.NANOSECONDS);
+
+        return segundos + "." + milisegundos;
     }
 
     public void parar() {
@@ -43,7 +56,7 @@ public class Proceso extends Thread {
     //Espera de x/360 milisegundos
     private void esperar() {
         try {
-            Thread.sleep(100000 / 360);
+            Thread.sleep(200000 / (100 * dad.getVelocidad()));
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

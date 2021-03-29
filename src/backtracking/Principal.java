@@ -32,8 +32,11 @@ public class Principal {
         } else if (s.contentEquals("gui" + ":" + gui.BOTON02) && proc != null) {
             proc.parar();
             proc = null;
-        } else if (s.contentEquals("gui" + ":" + "Borrar Piezas") && proc != null) {
+        } else if (s.contentEquals("gui" + ":" + gui.BOTON03) && proc != null) {
             dad.inicializar();
+        } else if (s.contentEquals("gui" + ":" + gui.BOTON05)) {
+            dad.inicializar();
+            proc = null;
         } else if (s.startsWith("setPieza" + ":")) {
             s = s.split(":")[1];
             int x = Integer.parseInt(s.split("/")[0]);
@@ -49,6 +52,9 @@ public class Principal {
             int N = Integer.parseInt(s.split("/")[1]);
             dad.setN(N);
             dad.inicializar();
+        } else if (s.startsWith("Velocitat:")) {
+            int v = Integer.parseInt(s.substring(s.indexOf(":") + 1));
+            dad.setVelocidad(v);
         }
     }
 

@@ -86,9 +86,9 @@ public class Tablero extends JPanel implements Observer, MouseListener {
         g2.setStroke(pincel);
         g2.drawRect(0, 0, LONG - 1, LONG - 1);
 
-        for (Pieza pieza : dad.getPiezas()) {
+        dad.getPiezas().forEach((pieza) -> {
             dibujarPieza(g, radio, pieza);
-        }
+        });
     }
 
     @Override
@@ -131,7 +131,7 @@ public class Tablero extends JPanel implements Observer, MouseListener {
         int orden = dad.getOrden(i, j);
         Rectangle rect = new Rectangle();
         int radio = LONG / dad.getN();
-        Font font = new Font("Chess Cases", Font.TRUETYPE_FONT, 46);
+        Font font = new Font("Chess Cases", Font.TRUETYPE_FONT, 56 - (dad.getN()*2));
         if (orden > 0) {
             g.setColor(Color.BLACK);
             rect.setBounds(radio * i, radio * j, radio, radio);

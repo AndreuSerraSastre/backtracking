@@ -12,7 +12,9 @@ public class Datos extends Observable {
     private Pieza pieza2;
     private boolean[][] visitadas;
     private int[][] orden;
-
+    private int velocidad = 7;
+    private boolean run = false;
+    
     //Constructor que inicializa el modelo de datos
     public Datos() {
         inicializar();
@@ -20,6 +22,22 @@ public class Datos extends Observable {
 
     public int getN() {
         return N;
+    }
+
+    public int getVelocidad() {
+        return velocidad;
+    }
+
+    public void setVelocidad(int velocidad) {
+        this.velocidad = velocidad;
+    }
+
+    public boolean isRun() {
+        return run;
+    }
+
+    public void setRun(boolean run) {
+        this.run = run;
     }
 
     public void setN(int N) {
@@ -35,6 +53,7 @@ public class Datos extends Observable {
         pieza2 = null;
         visitadas = new boolean[N][N];
         orden = new int[N][N];
+        run = false;
         notificarCambio();
     }
 

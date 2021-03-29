@@ -17,12 +17,15 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JSlider;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 /**
  *
  * @author mascport
  */
-public class Gui extends JFrame implements ActionListener {
+public class Gui extends JFrame implements ActionListener, ChangeListener {
 
     //Punteros al panel principal de la GUI y al Modelo de datos
     private final Principal prog;
@@ -32,11 +35,13 @@ public class Gui extends JFrame implements ActionListener {
     public final String BOTON02 = "Stop";
     public final String BOTON03 = "Borrar Piezas";
     public final String BOTON04 = "Crear NxN";
+    public final String BOTON05 = "Reiniciar";
     private javax.swing.JComboBox<String> piezasComboBox;
     private JButton start;
     private JButton stop;
     private JButton deleteAll;
     private JButton setN;
+    private JButton reiniciar;
     private TextField numero;
 
     //Constructor de la Interfaz gráfica de usuario
@@ -49,6 +54,10 @@ public class Gui extends JFrame implements ActionListener {
         this.add(hacerComandos(), BorderLayout.NORTH);
         this.add(tablero, BorderLayout.CENTER);
         this.pack();
+        JSlider barra = new JSlider(1, 70, 7);
+        barra.setOpaque(true);
+        barra.addChangeListener(this);
+        this.add(BorderLayout.SOUTH, barra);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
     }
@@ -80,6 +89,12 @@ public class Gui extends JFrame implements ActionListener {
         pan.add(deleteAll);
         deleteAll.setEnabled(true);
 
+        reiniciar = new JButton(BOTON05);
+        reiniciar.setName(BOTON05);
+        reiniciar.addActionListener(this);
+        pan.add(reiniciar);
+        reiniciar.setEnabled(true);
+
         piezasComboBox = new javax.swing.JComboBox<>();
         piezasComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Caballo", "Rei", "Reina", "Torre", "Araña", "Rayo"}));
         pan.add(piezasComboBox);
@@ -104,11 +119,15 @@ public class Gui extends JFrame implements ActionListener {
                 start.setEnabled(false);
                 stop.setEnabled(true);
                 deleteAll.setEnabled(false);
+                reiniciar.setEnabled(false);
+                setN.setEnabled(false);
                 prog.notificar("gui:" + BOTON01);
+                dad.setRun(true);
                 break;
             case BOTON02:
                 start.setEnabled(true);
                 stop.setEnabled(false);
+                reiniciar.setEnabled(true);
                 prog.notificar("gui:" + BOTON02);
                 break;
             case BOTON03:
@@ -125,14 +144,28 @@ public class Gui extends JFrame implements ActionListener {
                 }
                 prog.notificar("gui:" + BOTON04 + "/" + numero.getText());
                 break;
+            case BOTON05:
+                start.setEnabled(false);
+                stop.setEnabled(false);
+                deleteAll.setEnabled(true);
+                setN.setEnabled(true);
+                prog.notificar("gui:" + BOTON05);
+                break;
             default:
                 break;
         }
     }
 
     public void setPieza(int x, int y) {
-        prog.notificar("setPieza:" + x + "/" + y + "/" + piezasComboBox.getSelectedItem().toString());
-        start.setEnabled(true);
+        if (!dad.isRun()) {
+            prog.notificar("setPieza:" + x + "/" + y + "/" + piezasComboBox.getSelectedItem().toString());
+            start.setEnabled(true);
+        }
+    }
+
+    @Override
+    public void stateChanged(ChangeEvent e) {
+        prog.notificar("Velocitat:" + ((JSlider) e.getSource()).getValue());
     }
 
 }
