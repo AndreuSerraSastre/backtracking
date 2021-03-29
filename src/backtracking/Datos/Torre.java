@@ -7,10 +7,10 @@ public class Torre extends Pieza {
     public Torre(int posicionX, int posicionY, boolean NB, int N) {
         super(posicionX, posicionY);
         for (int i = 1; i < N; i++) {
-            setMovimientos(new Point(0, N));
-            setMovimientos(new Point(0, N * -1));
-            setMovimientos(new Point(N, 0));
-            setMovimientos(new Point(N * -1, 0));
+            setMovimientos(new Point(0, i));
+            setMovimientos(new Point(0, i * -1));
+            setMovimientos(new Point(i, 0));
+            setMovimientos(new Point(i * -1, 0));
         }
         if (NB) {
             setImagen("imagenes/torre-negra.png");

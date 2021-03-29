@@ -7,10 +7,12 @@ package backtracking.Controlador;
 import backtracking.Datos.Araña;
 import backtracking.Datos.Caballo;
 import backtracking.Datos.Datos;
+import backtracking.Datos.Pieza;
 import backtracking.Datos.Rayo;
 import backtracking.Datos.Rei;
 import backtracking.Datos.Reina;
 import backtracking.Datos.Torre;
+import java.awt.Point;
 
 public class Proceso extends Thread {
 
@@ -28,9 +30,10 @@ public class Proceso extends Thread {
     public void run() {
         seguir = true;
 
-        while (seguir) {
-            esperar();
-        }
+//        while (!seguir) {
+        visitar(0);
+//            esperar();
+//        }
     }
 
     public void parar() {
@@ -40,7 +43,7 @@ public class Proceso extends Thread {
     //Espera de x/360 milisegundos
     private void esperar() {
         try {
-            Thread.sleep(200000 / 360);
+            Thread.sleep(100000 / 360);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -67,5 +70,38 @@ public class Proceso extends Thread {
                 dad.setPiezas(new Rayo(x, y, false));
                 break;
         }
+    }
+
+    private void visitar(int i) {
+        Pieza pieza = dad.getPiezas().get(i);
+        while (!seguir) {
+            esperar();
+        }
+        if (!dad.todasVisitadas()) {
+            for (Point movimiento : pieza.getMovimientos()) {
+                Point siguientePos = mirarMovEnTablero(pieza.getPosicion(), movimiento);
+                if (valida(siguientePos)) {
+                    if (!dad.visitada(siguientePos)) {
+                        Point anteriorPos = pieza.getPosicion();
+                        dad.changePositionPieza(pieza, siguientePos);
+                        esperar();
+                        visitar((i + 1) % dad.getPiezas().size());
+                        if (!dad.todasVisitadas()) {
+                            dad.quitarVisita(pieza, anteriorPos);
+                        } else {
+                            return;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private Point mirarMovEnTablero(Point posicion, Point movimiento) {
+        return new Point(posicion.x + movimiento.x, posicion.y + movimiento.y);
+    }
+
+    private boolean valida(Point siguientePos) {
+        return siguientePos.x >= 0 && siguientePos.x < dad.getN() && siguientePos.y >= 0 && siguientePos.y < dad.getN();
     }
 }

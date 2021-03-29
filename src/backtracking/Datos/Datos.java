@@ -1,5 +1,6 @@
 package backtracking.Datos;
 
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Observable;
 
@@ -69,23 +70,40 @@ public class Datos extends Observable {
         notificarCambio();
     }
 
-    public void changePositionPieza(Pieza pieza, int x, int y) {
-        pieza.setPosicionX(x);
-        pieza.setPosicionY(y);
-        visitadas[x][y] = true;
-        orden[x][y] = contador;
+    public void changePositionPieza(Pieza pieza, Point p) {
+        pieza.setPosicionX(p.x);
+        pieza.setPosicionY(p.y);
+        visitadas[p.x][p.y] = true;
+        orden[p.x][p.y] = contador;
         contador++;
         notificarCambio();
     }
 
-    public boolean todasVisitadas(){
+    public boolean visitada(Point p) {
+        return visitadas[p.x][p.y];
+    }
+
+    public boolean todasVisitadas() {
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < N; j++) {
-                if(!visitadas[i][j]){
+                if (!visitadas[i][j]) {
                     return false;
                 }
             }
         }
         return true;
+    }
+
+    public int getOrden(int i, int j) {
+        return orden[i][j];
+    }
+
+    public void quitarVisita(Pieza pieza, Point anteriorPos) {
+        orden[pieza.getPosicionX()][pieza.getPosicionY()] = 0;
+        visitadas[pieza.getPosicionX()][pieza.getPosicionY()] = false;
+        pieza.setPosicionX(anteriorPos.x);
+        pieza.setPosicionY(anteriorPos.y);
+        contador--;
+        notificarCambio();
     }
 }

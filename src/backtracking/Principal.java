@@ -23,7 +23,9 @@ public class Principal {
     public void notificar(String s) {
         if (s.contentEquals("gui" + ":" + gui.BOTON01)) {
             if (proc == null) {
-                dad.inicializar();
+                proc = new Proceso(dad);
+                proc.start();
+            } else {
                 proc = new Proceso(dad);
                 proc.start();
             }

@@ -11,8 +11,11 @@ import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
 import java.awt.event.MouseEvent;
@@ -60,20 +63,20 @@ public class Tablero extends JPanel implements Observer, MouseListener {
         g2.setColor(Color.WHITE);
         g2.fillRect(0, 0, LONG, LONG);
 
-        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-        g2.setColor(Color.GRAY);
-
         // Crea tablero
         int radio = LONG / N;
 
         for (int j = 0; j < N; j++) {
             for (int i = 0; i < N; i++) {
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(Color.GRAY);
                 if ((j % 2) != 0) {
                     g2.fillRect(2 * radio * i, radio * j, radio, radio);
                 }
                 if ((i % 2 != 0)) {
                     g2.fillRect(radio * i, 2 * radio * j, radio, radio);
                 }
+                dibujarOrdenVisitadas(g,i,j);
             }
         }
 
@@ -122,5 +125,25 @@ public class Tablero extends JPanel implements Observer, MouseListener {
 
     @Override
     public void mouseExited(MouseEvent me) {
+    }
+
+    private void dibujarOrdenVisitadas(Graphics g, int i, int j) {
+        int orden = dad.getOrden(i, j);
+        Rectangle rect = new Rectangle();
+        int radio = LONG / dad.getN();
+        Font font = new Font("Chess Cases", Font.TRUETYPE_FONT, 46);
+        if (orden > 0) {
+            g.setColor(Color.BLACK);
+            rect.setBounds(radio * i, radio * j, radio, radio);
+            centrarTexto(g, orden + "", rect, font);
+        }
+    }
+
+    private void centrarTexto(Graphics g, String texto, Rectangle r, Font f) {
+        FontMetrics medir = g.getFontMetrics(f);
+        int x = r.x + (r.width - medir.stringWidth(texto)) / 2;
+        int y = r.y + ((r.height - medir.getHeight()) / 2) + medir.getAscent();
+        g.setFont(f);
+        g.drawString(texto, x, y);
     }
 }

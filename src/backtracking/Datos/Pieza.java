@@ -14,6 +14,10 @@ public class Pieza {
         this.posicionX = posicionX;
         this.posicionY = posicionY;
     }
+    
+    public Point getPosicion(){
+        return new Point(posicionX, posicionY);
+    }
 
     public int getPosicionX() {
         return posicionX;
