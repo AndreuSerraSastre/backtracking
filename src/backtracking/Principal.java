@@ -21,7 +21,8 @@ public class Principal {
     }
 
     public void notificar(String s) {
-        if (s.contentEquals("gui" + ":" + gui.BOTON01)) {
+        if (s.startsWith("gui" + ":" + gui.BOTON01)) {
+            Boolean turbo = Boolean.parseBoolean(s.split("/")[1]);
             if (proc == null) {
                 proc = new Proceso(dad);
                 proc.start();
@@ -29,6 +30,7 @@ public class Principal {
                 proc = new Proceso(dad);
                 proc.start();
             }
+            dad.setTurbo(turbo);
         } else if (s.contentEquals("gui" + ":" + gui.BOTON02) && proc != null) {
             proc.parar();
             proc = null;
@@ -42,11 +44,12 @@ public class Principal {
             int x = Integer.parseInt(s.split("/")[0]);
             int y = Integer.parseInt(s.split("/")[1]);
             String pieza = s.split("/")[2];
+            Boolean BN = Boolean.parseBoolean(s.split("/")[3]);
             if (proc == null) {
                 proc = new Proceso(dad);
-                proc.setPieza(x, y, pieza);
+                proc.setPieza(x, y, pieza, BN);
             } else {
-                proc.setPieza(x, y, pieza);
+                proc.setPieza(x, y, pieza, BN);
             }
         } else if (s.startsWith("gui" + ":" + gui.BOTON04)) {
             int N = Integer.parseInt(s.split("/")[1]);

@@ -8,16 +8,24 @@ public class Datos extends Observable {
 
     private int N = 7;
     private int contador;
-    private Pieza pieza1;
-    private Pieza pieza2;
     private boolean[][] visitadas;
     private int[][] orden;
     private int velocidad = 7;
     private boolean run = false;
-    
+    private boolean turbo = false;
+    private ArrayList<Pieza> piezas;
+
     //Constructor que inicializa el modelo de datos
     public Datos() {
         inicializar();
+    }
+
+    public boolean isTurbo() {
+        return turbo;
+    }
+
+    public void setTurbo(boolean turbo) {
+        this.turbo = turbo;
     }
 
     public int getN() {
@@ -49,8 +57,7 @@ public class Datos extends Observable {
 
     public void inicializar() {
         contador = 1;
-        pieza1 = null;
-        pieza2 = null;
+        piezas = new ArrayList<>();
         visitadas = new boolean[N][N];
         orden = new int[N][N];
         run = false;
@@ -58,13 +65,6 @@ public class Datos extends Observable {
     }
 
     public ArrayList<Pieza> getPiezas() {
-        ArrayList<Pieza> piezas = new ArrayList<>();
-        if (pieza1 != null) {
-            piezas.add(pieza1);
-        }
-        if (pieza2 != null) {
-            piezas.add(pieza2);
-        }
         return piezas;
     }
 
@@ -74,19 +74,18 @@ public class Datos extends Observable {
         notifyObservers();  //Notifica a los observadores que miren si el modelo (el observado) ha cambiado
     }
 
-    public void setPiezas(Pieza pieza) {
-        if (pieza1 == null && !visitadas[pieza.getPosicionX()][pieza.getPosicionY()]) {
-            pieza1 = pieza;
-            visitadas[pieza.getPosicionX()][pieza.getPosicionY()] = true;
-            orden[pieza.getPosicionX()][pieza.getPosicionY()] = contador;
-            contador++;
-        } else if (pieza2 == null && !visitadas[pieza.getPosicionX()][pieza.getPosicionY()]) {
-            pieza2 = pieza;
-            visitadas[pieza.getPosicionX()][pieza.getPosicionY()] = true;
-            orden[pieza.getPosicionX()][pieza.getPosicionY()] = contador;
-            contador++;
-        }
+    public void notificarCambioFin() {
         notificarCambio();
+    }
+
+    public void setPiezas(Pieza pieza) {
+        if (!visitadas[pieza.getPosicionX()][pieza.getPosicionY()]) {
+            piezas.add(pieza);
+            visitadas[pieza.getPosicionX()][pieza.getPosicionY()] = true;
+            orden[pieza.getPosicionX()][pieza.getPosicionY()] = contador;
+            contador++;
+            notificarCambio();
+        }
     }
 
     public void changePositionPieza(Pieza pieza, Point p) {
@@ -95,7 +94,9 @@ public class Datos extends Observable {
         visitadas[p.x][p.y] = true;
         orden[p.x][p.y] = contador;
         contador++;
-        notificarCambio();
+        if (!turbo) {
+            notificarCambio();
+        }
     }
 
     public boolean visitada(Point p) {
@@ -123,6 +124,8 @@ public class Datos extends Observable {
         pieza.setPosicionX(anteriorPos.x);
         pieza.setPosicionY(anteriorPos.y);
         contador--;
-        notificarCambio();
+        if (!turbo) {
+            notificarCambio();
+        }
     }
 }

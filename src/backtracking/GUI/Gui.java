@@ -14,9 +14,11 @@ import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -43,6 +45,9 @@ public class Gui extends JFrame implements ActionListener, ChangeListener {
     private JButton setN;
     private JButton reiniciar;
     private TextField numero;
+    private JCheckBox NB;
+    private JCheckBox Turbo;
+    private JProgressBar porc;
 
     //Constructor de la Interfaz gráfica de usuario
     public Gui(Datos d, Principal p) {
@@ -71,6 +76,9 @@ public class Gui extends JFrame implements ActionListener, ChangeListener {
         JPanel pan = new JPanel();
         pan.setLayout(new FlowLayout());
 
+        Turbo = new JCheckBox("Turbo");
+        pan.add(Turbo);
+
         start = new JButton(BOTON01);
         start.setName(BOTON01);
         start.setEnabled(false);
@@ -96,7 +104,7 @@ public class Gui extends JFrame implements ActionListener, ChangeListener {
         reiniciar.setEnabled(true);
 
         piezasComboBox = new javax.swing.JComboBox<>();
-        piezasComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Caballo", "Rei", "Reina", "Torre", "Araña", "Rayo"}));
+        piezasComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Caballo", "Rei", "Reina", "Torre", "Araña", "Rayo", "Peon", "Alfil"}));
         pan.add(piezasComboBox);
 
         numero = new TextField();
@@ -107,6 +115,9 @@ public class Gui extends JFrame implements ActionListener, ChangeListener {
         setN.addActionListener(this);
         pan.add(setN);
         setN.setEnabled(true);
+
+        NB = new JCheckBox("Negro o blanco");
+        pan.add(NB);
 
         return pan;
     }
@@ -121,7 +132,7 @@ public class Gui extends JFrame implements ActionListener, ChangeListener {
                 deleteAll.setEnabled(false);
                 reiniciar.setEnabled(false);
                 setN.setEnabled(false);
-                prog.notificar("gui:" + BOTON01);
+                prog.notificar("gui:" + BOTON01 + "/" + Turbo.isSelected());
                 dad.setRun(true);
                 break;
             case BOTON02:
@@ -158,7 +169,7 @@ public class Gui extends JFrame implements ActionListener, ChangeListener {
 
     public void setPieza(int x, int y) {
         if (!dad.isRun()) {
-            prog.notificar("setPieza:" + x + "/" + y + "/" + piezasComboBox.getSelectedItem().toString());
+            prog.notificar("setPieza:" + x + "/" + y + "/" + piezasComboBox.getSelectedItem().toString() + "/" + NB.isSelected());
             start.setEnabled(true);
         }
     }

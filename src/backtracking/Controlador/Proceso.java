@@ -4,9 +4,11 @@
  */
 package backtracking.Controlador;
 
+import backtracking.Datos.Alfil;
 import backtracking.Datos.Araña;
 import backtracking.Datos.Caballo;
 import backtracking.Datos.Datos;
+import backtracking.Datos.Peon;
 import backtracking.Datos.Pieza;
 import backtracking.Datos.Rayo;
 import backtracking.Datos.Rei;
@@ -40,6 +42,7 @@ public class Proceso extends Thread {
         } else {
             JOptionPane.showMessageDialog(null, "No se ha podido encontrar ninguna solución.", "¡ERROR!", JOptionPane.ERROR_MESSAGE);
         }
+        dad.notificarCambioFin();
     }
 
     private String formatNano(long temps) {
@@ -51,6 +54,7 @@ public class Proceso extends Thread {
 
     public void parar() {
         seguir = false;
+        dad.notificarCambioFin();
     }
 
     //Espera de x/360 milisegundos
@@ -62,25 +66,31 @@ public class Proceso extends Thread {
         }
     }
 
-    public void setPieza(int x, int y, String pieza) {
+    public void setPieza(int x, int y, String pieza, boolean BN) {
         switch (pieza) {
             case "Caballo":
-                dad.setPiezas(new Caballo(x, y, false));
+                dad.setPiezas(new Caballo(x, y, BN));
                 break;
             case "Rei":
-                dad.setPiezas(new Rei(x, y, false));
+                dad.setPiezas(new Rei(x, y, BN));
                 break;
             case "Reina":
-                dad.setPiezas(new Reina(x, y, false, dad.getN()));
+                dad.setPiezas(new Reina(x, y, BN, dad.getN()));
                 break;
             case "Torre":
-                dad.setPiezas(new Torre(x, y, false, dad.getN()));
+                dad.setPiezas(new Torre(x, y, BN, dad.getN()));
                 break;
             case "Araña":
-                dad.setPiezas(new Araña(x, y, false));
+                dad.setPiezas(new Araña(x, y, BN));
                 break;
             case "Rayo":
-                dad.setPiezas(new Rayo(x, y, false));
+                dad.setPiezas(new Rayo(x, y, BN));
+                break;
+            case "Peon":
+                dad.setPiezas(new Peon(x, y, BN));
+                break;
+            case "Alfil":
+                dad.setPiezas(new Alfil(x, y, BN, dad.getN()));
                 break;
         }
     }
@@ -97,7 +107,9 @@ public class Proceso extends Thread {
                     if (!dad.visitada(siguientePos)) {
                         Point anteriorPos = pieza.getPosicion();
                         dad.changePositionPieza(pieza, siguientePos);
-                        esperar();
+                        if (!dad.isTurbo()) {
+                            esperar();
+                        }
                         visitar((i + 1) % dad.getPiezas().size());
                         if (!dad.todasVisitadas()) {
                             dad.quitarVisita(pieza, anteriorPos);
